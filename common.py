@@ -45,9 +45,9 @@ class Common():
     def log(msg):
         Common.logger.info(msg)
 
-    # Convert units raw to nano. Nano is divisible by 30.
+    # Convert units raw to nano. Banano is divisible by 30.
     @staticmethod
-    def rawToNano(raw):
+    def rawToBanano(raw):
         return raw / 1e30
 
     @staticmethod
