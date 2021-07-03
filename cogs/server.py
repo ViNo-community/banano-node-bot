@@ -22,9 +22,10 @@ class ServerCog(commands.Cog, name="Server"):
             server_uptime = Common.get_days_from_secs(seconds)
             value = await self.bot.send_rpc({"action": "uptime"},"seconds")
             pretty_node_uptime = Common.get_days_from_secs(int(value))
-            ip_addr = socket.gethostbyname(self.bot.server_name)
+            server = socket.gethostname()
+            ip_addr = socket.gethostbyname(server)
             response = (
-                f"**Server:** {self.bot.server_name} [{ip_addr}]\n"
+                f"**Server:** {server} [{ip_addr}]\n"
                 f"**Node Name:** {node_name}\n"
                 f"**Server Load:** {server_load}\n"
                 f"**Memory Usage:** {usedMem} MB / {totalMem} MB : {percent:.2f}%\n"

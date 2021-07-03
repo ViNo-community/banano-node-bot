@@ -22,7 +22,6 @@ class BananoNodeBot(commands.Bot):
     banano_account = ""
     discord_token = ""
     rpc_url = ""
-    server_name = ""
     api_url = ""
     client_id = ""
     cmd_prefix = "!"
@@ -54,7 +53,6 @@ class BananoNodeBot(commands.Bot):
         self.permission = int(os.getenv('permission', 247872))
         self.heartbeat_interval = int(os.getenv('heartbeat_interval', 180))
         self.timeout = float(os.getenv('timeout', 5.0))
-        # self.server_name = os.getenv('server')
         self.client_id = os.getenv('client_id')
         if os.getenv('command_prefix') is not None:
             self.cmd_prefix = os.getenv('command_prefix')
