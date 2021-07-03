@@ -51,7 +51,8 @@ class AccountsCog(commands.Cog, name="Accounts"):
     @commands.command(name='representative', aliases=['rep','show_rep','show_representative'], help="Displays representative")
     async def representative(self,ctx):
         try:
-            value = await self.bot.get_value('repAccount')
+            account = await self.bot.get_banano_account()
+            value = await self.bot.send_rpc({"action":"account_representative","account":account},"representative")
             response = f"Representative: {value}"
             await ctx.send(response)
         except Exception as e:
@@ -60,8 +61,10 @@ class AccountsCog(commands.Cog, name="Accounts"):
     @commands.command(name='voting_weight', aliases=['votingweight','weight','voting'], help="Displays voting weight")
     async def voting_weight(self,ctx):
         try:
-            value = await self.bot.get_value('votingWeight')
-            response = f"Voting weight is {value:.2f} nano"
+            account = await self.bot.get_banano_account()
+            value = await self.bot.send_rpc({"action":"account_weight","account":account},"weight")
+            weight = float(value)
+            response = f"Voting weight is {weight:.2f} nano"
             await ctx.send(response)
         except Exception as e:
             raise Exception("Could not grab voting weight", e)  
