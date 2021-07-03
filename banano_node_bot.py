@@ -13,13 +13,13 @@ from common import Common
 from threading import Thread
 import time
 
-class NanoNodeBot(commands.Bot):
+class BananoNodeBot(commands.Bot):
 
     # Default values
     initialized = False
     online = True
     # The nano account associated with this node
-    nano_account = ""
+    banano_account = ""
     discord_token = ""
     rpc_url = ""
     server_name = "patrola.me"
@@ -61,7 +61,7 @@ class NanoNodeBot(commands.Bot):
             except ValueError:
                 self.timeout = 5.0
         # Init set command prefix and description
-        commands.Bot.__init__(self, command_prefix=self.cmd_prefix,description="Nano Node Bot")
+        commands.Bot.__init__(self, command_prefix=self.cmd_prefix,description="Banano Node Bot")
         # Register heartbeat checker
         async def _heartbeat_loop():
             while(True):
@@ -98,7 +98,7 @@ class NanoNodeBot(commands.Bot):
         # Run bot
         super().run(self.discord_token)
 
-    # Check if the nano node is online or not
+    # Check if the node is online or not
     async def check_online_status(self):
         # NOTE: This can be done a better way once it has direct access to RPC.
         # Grab response from API_URL
@@ -227,7 +227,7 @@ class NanoNodeBot(commands.Bot):
 if __name__=='__main__':
     # Initiate Discord bot
     try:
-        bot = NanoNodeBot()
+        bot = BananoNodeBot()
         print("Bot is now running with prefix " + bot.command_prefix)
         # Run the bot loop
         bot.run()
