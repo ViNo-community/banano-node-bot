@@ -41,12 +41,15 @@ class BananoNodeBot(commands.Bot):
             raise ValueError("CLIENT_ID not found. Could not start bot.")
         if os.getenv('rpc_url') is None:
              raise ValueError("RPC_URL not found. Could not start bot.")
+        if os.getenv('banano_account') is None:
+            raise ValueError("BANANO_ACCOUNT not found. Could not start bot")
         # Grab tokens
         self.discord_token= os.getenv('discord_token')
         self.rpc_url = os.getenv('rpc_url')
         self.api_url = os.getenv('api_url')
         self.client_id = os.getenv('client_id')
         self.delegators_url = os.getenv('delegators_url')
+        self.banano_account = os.getenv('banano_account')
         self.cmd_prefix = os.getenv('command_prefix', "!")
         self.permission = int(os.getenv('permission', 247872))
         self.heartbeat_interval = int(os.getenv('heartbeat_interval', 180))
@@ -191,8 +194,8 @@ class BananoNodeBot(commands.Bot):
         return self.online
 
     # Get nano account associated with node
-    async def get_nano_account(self):
-        return await self.get_value('nanoNodeAccount')
+    async def get_banano_account(self):
+        return self.banano_account
 
     # Set online status of node
     async def set_online(self, param):
