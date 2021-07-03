@@ -105,7 +105,7 @@ class BananoNodeBot(commands.Bot):
     async def check_online_status(self):
         # NOTE: This can be done a better way once it has direct access to RPC.
         # Grab response from API_URL
-        r = requests.get(self.get_api_url(), timeout=self.timeout)
+        r = requests.post(url = self.get_rpc_url(), json={"action":"version"}, timeout=self.timeout)
         if r.status_code == 200:
             return True
         else:
