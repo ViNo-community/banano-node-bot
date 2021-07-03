@@ -9,10 +9,10 @@ class NodesCog(commands.Cog, name="Nodes"):
     @commands.command(name='node', help="Displays summary of node information")
     async def node(self,ctx):
         try:
-            account = await self.bot.get_value('nanoNodeAccount')
-            version = await self.bot.get_value('version')
-            dbase = await self.bot.get_value('store_vendor')
-            numPeers = await self.bot.get_value('numPeers')
+            account = await self.bot.get_banano_account()
+            version = await self.bot.send_rpc({"action":"version"},"node_vendor")
+            dbase = await self.bot.send_rpc({"action":"version"},"store_vendor")
+            numPeers = ""
             response = (
                 f"**Address:** {account}\n"
                 f"**Version:** {version}\n"
@@ -26,7 +26,7 @@ class NodesCog(commands.Cog, name="Nodes"):
     @commands.command(name='address', aliases=['addr','node_address','nodeaddress'], help="Displays node address")
     async def address(self,ctx):
         try:
-            value = await self.bot.get_value('nanoNodeAccount')
+            value = await self.bot.get_banano_address()
             response = f"Node address is {value}"
             await ctx.send(response)
         except Exception as e:
@@ -44,7 +44,7 @@ class NodesCog(commands.Cog, name="Nodes"):
     @commands.command(name='num_peers', aliases=['numpeers','peers'], help="Displays number of peers")
     async def num_peers(self,ctx):
         try:
-            value = await self.bot.get_value('numPeers')
+            value = await self.bot.send_rpc({"action": "peers"})
             response = f"{value} peers"
             await ctx.send(response)
         except Exception as e:
@@ -53,7 +53,7 @@ class NodesCog(commands.Cog, name="Nodes"):
     @commands.command(name='uptime', aliases=['up','nodeuptime','node_uptime'], help="Displays node uptime")
     async def uptime(self,ctx):
         try:
-            value = await self.bot.get_value('nodeUptimeStartup')
+            value = await self.bot.send_rpc({"action": "uptime"})
             pretty_node_uptime = Common.get_days_from_secs(value)
             response = f"Node uptime is {pretty_node_uptime}"
             await ctx.send(response)
