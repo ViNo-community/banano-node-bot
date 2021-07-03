@@ -161,33 +161,6 @@ class BananoNodeBot(commands.Bot):
                 raise Exception("Could not connect to API")
         except Exception as ex:
             raise ex
-
-    # Helper function for getting value from response
-    # From MyNanoNinja API endpoint
-    async def get_value(self, param):
-        answer = ""
-        try:
-            # Grab response from API_URL
-            r = requests.get(self.get_api_url(), timeout=self.timeout)
-            if r.status_code == 200:
-                # Parse JSON
-                content = json.loads(r.text)
-                # Grab value named param
-                answer = content[param]
-                # Log answer 
-                Common.logger.info(f"<- {answer}")
-                # Update to online
-                online = await self.get_online()
-                if(online== False):
-                    await self.set_online(True)
-            else:
-                print(f"Got status {r.status_code} !!!!")
-                # Update the status to
-                await self.set_online(False)
-                raise Exception(f"Status {r.status_code}. Could not connect to API")
-        except Exception as ex:
-            raise ex
-        return answer
     
     # Get online status of node
     async def get_online(self):
