@@ -11,12 +11,10 @@ class NodesCog(commands.Cog, name="Nodes"):
         try:
             account = await self.bot.get_banano_account()
             version = await self.bot.send_rpc({"action":"version"},"node_vendor")
-            dbase = await self.bot.send_rpc({"action":"version"},"store_vendor")
             numPeers = ""
             response = (
                 f"**Address:** {account}\n"
                 f"**Version:** {version}\n"
-                f"**DBASE:** {dbase}\n"
                 f"**Number of Peers:**: {numPeers}\n"
             )
             await ctx.send(response)
