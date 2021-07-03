@@ -159,6 +159,8 @@ class BananoNodeBot(commands.Bot):
                 # Update the status to
                 await self.set_online(False)
                 raise Exception("Could not connect to API")
+        except KeyError as keyex:
+            return ""
         except Exception as ex:
             raise ex
     
