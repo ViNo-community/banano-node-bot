@@ -29,8 +29,10 @@ class AccountsCog(commands.Cog, name="Accounts"):
     @commands.command(name='balance', aliases=['bal','show_balance'], help="Displays account balance")
     async def balance(self,ctx):
         try:
-            value = await self.bot.get_value('accBalanceMnano')
-            response = f"Account balance is {value:.2f} nano"
+            account = await self.bot.get_banano_account()
+            value = await self.bot.send_rpc({"action":"account_balance","account":account},"balance")
+            balance = float(value)
+            response = f"Account balance is {balance:.2f} ban"
             await ctx.send(response)
         except Exception as e:
             raise Exception("Could not grab balance", e)   
@@ -38,8 +40,10 @@ class AccountsCog(commands.Cog, name="Accounts"):
     @commands.command(name='pending', aliases=['show_pending'], help="Displays account pending")
     async def pending(self,ctx):
         try:
-            value = await self.bot.get_value('accPendingMnano')
-            response = f"Account pending is {value:.2f} nano"
+            account = await self.bot.get_banano_account()
+            value = await self.bot.send_rpc({"action":"account_balance","account":account},"pending")
+            pending = float(value)
+            response = f"Account pending is {pending:.2f} ban"
             await ctx.send(response)
         except Exception as e:
             raise Exception("Could not display account pending", e)     
