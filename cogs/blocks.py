@@ -1,6 +1,5 @@
 from discord.ext import commands
 
-
 class BlocksCog(commands.Cog, name="Blocks"):
 
     def __init__(self, bot):
@@ -9,10 +8,12 @@ class BlocksCog(commands.Cog, name="Blocks"):
     @commands.command(name='blocks', help="Displays summary of block information")
     async def block(self,ctx):
         try:
-            currentBlock = await self.bot.get_value('currentBlock')
-            cementedBlocks = await self.bot.get_value('cementedBlocks')
-            uncheckedBlocks = await self.bot.get_value('uncheckedBlocks')
-            sync = await self.bot.get_value('blockSync')
+            currentBlock = await self.bot.send_rpc({"action":"block_count"},"count")
+            current = int(currentBlock)
+            cementedBlocks = await self.bot.send_rpc({"action":"block_count"},"cemented")
+            cemented = int(cementedBlocks)
+            uncheckedBlocks = await self.bot.send_rpc({"action":"block_count"},"unchecked")
+            sync = float(current/cemented)
             response = (
                 f"**Cemented Blocks:** {cementedBlocks}\n"
                 f"**Current Block:** {currentBlock}\n"
@@ -57,7 +58,7 @@ class BlocksCog(commands.Cog, name="Blocks"):
             cemented = int(value)
             value = await self.bot.send_rpc({"action":"block_count"},"count")
             current = int(value)
-            sync = float(cemented/current)
+            sync = float(current/cemented)
             response = f"Block sync is {sync:.4f}%"
             await ctx.send(response)
         except Exception as e:
