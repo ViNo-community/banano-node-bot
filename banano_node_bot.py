@@ -22,7 +22,7 @@ class BananoNodeBot(commands.Bot):
     banano_account = ""
     discord_token = ""
     rpc_url = ""
-    server_name = "patrola.me"
+    server_name = ""
     api_url = ""
     client_id = ""
     cmd_prefix = "!"

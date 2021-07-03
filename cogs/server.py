@@ -1,6 +1,8 @@
+from datetime import time
 import socket
 from discord.ext import commands
 from common import Common
+import psutil
 
 class ServerCog(commands.Cog, name="Server"):
 
@@ -10,14 +12,16 @@ class ServerCog(commands.Cog, name="Server"):
     @commands.command(name='server', help="Displays summary of server information")
     async def server(self,ctx):
         try:
-            node_name = await self.bot.get_value('nanoNodeName')
-            server_load =  await self.bot.get_value('systemLoad')
-            usedMem = await self.bot.get_value('usedMem')
-            totalMem = await self.bot.get_value('totalMem')
+            node_name = ""
+            server_load =  psutil.cpu_percent()
+            usedMem = psutil.virtual_memory().used
+            totalMem = psutil.virtual_memory().total
             percent = int(usedMem) / int(totalMem) * 100
-            server_uptime = await self.bot.get_value('systemUptime')
-            node_uptime = await self.bot.get_value('nodeUptimeStartup')
-            pretty_node_uptime = Common.get_days_from_secs(node_uptime)
+           # seconds = time.time() - psutil.boot_time()
+            seconds = 100
+            server_uptime = Common.get_days_from_secs(seconds)
+            value = await self.bot.send_rpc({"action": "uptime"},"seconds")
+            pretty_node_uptime = Common.get_days_from_secs(int(value))
             ip_addr = socket.gethostbyname(self.bot.server_name)
             response = (
                 f"**Server:** {self.bot.server_name} [{ip_addr}]\n"
