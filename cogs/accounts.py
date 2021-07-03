@@ -10,11 +10,14 @@ class AccountsCog(commands.Cog, name="Accounts"):
     @commands.command(name='account', aliases=['acc'], help="Displays summary of account information")
     async def account(self,ctx):
         try:
-            account = await self.bot.get_value('nanoNodeAccount')
-            representative =  await self.bot.get_value('repAccount')
-            balance = await self.bot.get_value('accBalanceMnano')
-            pending = await self.bot.get_value('accPendingMnano')
-            voting_weight = await self.bot.get_value('votingWeight')
+            account = await self.bot.get_banano_account()
+            representative = await self.bot.send_rpc({"action":"account_representative","account":account},"representative")
+            value = await self.bot.send_rpc({"action":"account_balance","account":account},"balance")
+            balance = float(value)
+            value = await self.bot.send_rpc({"action":"account_balance","account":account},"pending")
+            pending = float(value)
+            value = await self.bot.send_rpc({"action":"account_weight","account":account},"weight")
+            voting_weight = float(value)
             response = (
                 f"**Account:** {account}\n"
                 f"**Representative:** {representative}\n"
