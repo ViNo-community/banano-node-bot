@@ -1,5 +1,4 @@
 from discord.ext import commands
-from common import Common
 import json 
 
 class AccountsCog(commands.Cog, name="Accounts"):
@@ -72,12 +71,26 @@ class AccountsCog(commands.Cog, name="Accounts"):
         except Exception as e:
             raise Exception("Could not grab voting weight", e)  
     
+    @commands.command(name='delegators_count', help="Displays the amount of delegators of the node")
+    async def delegators_count(self,ctx,ref_account=""):
+        try:
+            # If no account specified use account of node
+            if(ref_account == ""):
+                nano_account = await self.bot.get_banano_account()
+            else:
+                nano_account = ref_account
+            value = await self.bot.send_rpc({"action":"delegators_count","account":nano_account},"count")
+            response = f"{nano_account} has {value} delegators"
+            await ctx.send(response)
+        except Exception as e:
+            raise Exception("Could not grab delegators_count", e)
+
     @commands.command(name='delegators', aliases=['show_delegators'], help="Displays the delegators of the node")
     async def delegators(self,ctx,ref_account=""):
         try:
             # If no account specified use account of node
             if(ref_account == ""):
-                nano_account = await self.bot.get_nano_account()
+                nano_account = await self.bot.get_banano_account()
             else:
                 nano_account = ref_account
             value = await self.bot.send_rpc({"action":"delegators","account":nano_account})
