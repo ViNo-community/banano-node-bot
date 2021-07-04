@@ -1,8 +1,9 @@
-from datetime import time
+
 import socket
 from discord.ext import commands
 from common import Common
 import psutil
+import time
 
 class ServerCog(commands.Cog, name="Server"):
 
@@ -17,8 +18,7 @@ class ServerCog(commands.Cog, name="Server"):
             usedMem = psutil.virtual_memory().used / 1e6
             totalMem = psutil.virtual_memory().total / 1e6
             percent = int(usedMem) / int(totalMem) * 100
-           # seconds = time.time() - psutil.boot_time()
-            seconds = 100
+            seconds = time.time() - psutil.boot_time()
             server_uptime = Common.get_days_from_secs(seconds)
             value = await self.bot.send_rpc({"action": "uptime"},"seconds")
             pretty_node_uptime = Common.get_days_from_secs(int(value))
