@@ -51,8 +51,8 @@ class NodesCog(commands.Cog, name="Nodes"):
     @commands.command(name='uptime', aliases=['up','nodeuptime','node_uptime'], help="Displays node uptime")
     async def uptime(self,ctx):
         try:
-            value = await self.bot.send_rpc({"action": "uptime"})
-            pretty_node_uptime = Common.get_days_from_secs(value)
+            value = await self.bot.send_rpc({"action": "uptime"},"seconds")
+            pretty_node_uptime = Common.get_days_from_secs(int(value))
             response = f"Node uptime is {pretty_node_uptime}"
             await ctx.send(response)
         except Exception as e:

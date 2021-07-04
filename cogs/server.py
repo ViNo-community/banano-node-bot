@@ -34,17 +34,6 @@ class ServerCog(commands.Cog, name="Server"):
         except Exception as e:
             raise Exception("Exception displaying server summary", e)      
 
-    @commands.command(name='uptime', help="Displays node uptime")
-    async def server_uptime(self,ctx):
-        try:
-            value = await self.bot.send_rpc({"action": "uptime"},"seconds")
-            secs = int(value)
-            pretty_node_uptime = Common.get_days_from_secs(secs)
-            response =  f"**Node Uptime:** {pretty_node_uptime}"
-            await ctx.send(response)
-        except Exception as e:
-            raise Exception("Could not grab server_uptime", e)    
-
     @commands.command(name='server_uptime', aliases=['serveruptime','sup'], help="Displays server uptime")
     async def server_uptime(self,ctx):
         try:
