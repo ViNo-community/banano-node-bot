@@ -10,12 +10,15 @@ class NodesCog(commands.Cog, name="Nodes"):
     async def node(self,ctx):
         try:
             account = await self.bot.get_banano_account()
+            # Get node version
             version = await self.bot.send_rpc({"action":"version"},"node_vendor")
-            numPeers = ""
+            # Get number of network pairs
+            peers = await self.bot.send_rpc({"action":"peers"},"peers")
+            peerCount = len(peers)
             response = (
                 f"**Address:** {account}\n"
                 f"**Version:** {version}\n"
-                f"**Number of Peers:**: {numPeers}\n"
+                f"**Number of Peers:**: {peerCount}\n"
             )
             await ctx.send(response)
         except Exception as e:
@@ -42,8 +45,10 @@ class NodesCog(commands.Cog, name="Nodes"):
     @commands.command(name='num_peers', aliases=['numpeers','peers'], help="Displays number of peers")
     async def num_peers(self,ctx):
         try:
-            value = await self.bot.send_rpc({"action": "peers"})
-            response = f"{value} peers"
+            # Get number of network pairs
+            peers = await self.bot.send_rpc({"action":"peers"},"peers")
+            peerCount = len(peers)
+            response = f"{peerCount} peers"
             await ctx.send(response)
         except Exception as e:
             raise Exception("Could not grab num_peers", e)   
