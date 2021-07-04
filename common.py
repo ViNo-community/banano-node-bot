@@ -8,7 +8,7 @@ class Common():
 
     load_dotenv()
     logging_level = int(os.getenv('logging_level'))
-    filename = datetime.datetime.now().strftime("%Y%m%d") + "_nano_node_bot.log"
+    filename = datetime.datetime.now().strftime("%Y%m%d") + "_banano_node_bot.log"
     logdir = Path(__file__).resolve().parent / "logs" 
     # Make directory if it doesn't already exist
     if not os.path.exists(logdir):
@@ -45,7 +45,7 @@ class Common():
     def log(msg):
         Common.logger.info(msg)
 
-    # Convert units raw to nano. Banano is divisible by 30.
+    # Convert units raw to banano. Banano is divisible by 30.
     @staticmethod
     def rawToBanano(raw):
         return raw / 1e30

@@ -20,9 +20,9 @@ class AccountsCog(commands.Cog, name="Accounts"):
             response = (
                 f"**Account:** {account}\n"
                 f"**Representative:** {representative}\n"
-                f"**Balance:** {balance:.2f} nano\n"
-                f"**Pending:**: {pending: .2f} nano\n"
-                f"**Voting Weight**: {voting_weight: .2f} nano"
+                f"**Balance:** {balance:.2f} ban\n"
+                f"**Pending:**: {pending: .2f} ban\n"
+                f"**Voting Weight**: {voting_weight: .2f} ban"
             )
             await ctx.send(response)
         except Exception as e:
@@ -66,7 +66,7 @@ class AccountsCog(commands.Cog, name="Accounts"):
             account = await self.bot.get_banano_account()
             value = await self.bot.send_rpc({"action":"account_weight","account":account},"weight")
             weight = float(value)
-            response = f"Voting weight is {weight:.2f} nano"
+            response = f"Voting weight is {weight:.2f} ban"
             await ctx.send(response)
         except Exception as e:
             raise Exception("Could not grab voting weight", e)  
@@ -76,11 +76,11 @@ class AccountsCog(commands.Cog, name="Accounts"):
         try:
             # If no account specified use account of node
             if(ref_account == ""):
-                nano_account = await self.bot.get_banano_account()
+                banano_account = await self.bot.get_banano_account()
             else:
-                nano_account = ref_account
-            value = await self.bot.send_rpc({"action":"delegators_count","account":nano_account},"count")
-            response = f"{nano_account} has {value} delegators"
+                banano_account = ref_account
+            value = await self.bot.send_rpc({"action":"delegators_count","account":banano_account},"count")
+            response = f"{banano_account} has {value} delegators"
             await ctx.send(response)
         except Exception as e:
             raise Exception("Could not grab delegators_count", e)
@@ -90,10 +90,10 @@ class AccountsCog(commands.Cog, name="Accounts"):
         try:
             # If no account specified use account of node
             if(ref_account == ""):
-                nano_account = await self.bot.get_banano_account()
+                banano_account = await self.bot.get_banano_account()
             else:
-                nano_account = ref_account
-            value = await self.bot.send_rpc({"action":"delegators","account":nano_account})
+                banano_account = ref_account
+            value = await self.bot.send_rpc({"action":"delegators","account":banano_account})
             content = json.loads(value)
             # Parse delegators information - account number and balance
             delegators = content['delegators']
@@ -104,15 +104,15 @@ class AccountsCog(commands.Cog, name="Accounts"):
             else:
                 print("delegators: ")
                 for item in delegators:
-                    # Convert from raw to nano
-                    nano = Common.rawToNano(int(delegators[item]))
+                    # Convert from raw to banano
+                    ban = Common.rawToBanano(int(delegators[item]))
                     # Cut message into chunks
                     if(len(msg) > CHUNK_SIZE):
                         await ctx.send(msg)
                         msg = ""
                     # Hide zero balances
-                    if(nano != 0): 
-                        msg += "**Account:** " + item + f" **Balance:** {nano:.4f}\n"
+                    if(ban != 0): 
+                        msg += "**Account:** " + item + f" **Balance:** {ban:.4f}\n"
             await ctx.send(msg)
         except Exception as e:
             raise Exception("Could not grab delegators", e)

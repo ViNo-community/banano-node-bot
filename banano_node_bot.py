@@ -18,7 +18,7 @@ class BananoNodeBot(commands.Bot):
     # Default values
     initialized = False
     online = True
-    # The nano account associated with this node
+    # The banano account associated with this node
     banano_account = ""
     discord_token = ""
     rpc_url = ""
@@ -166,7 +166,7 @@ class BananoNodeBot(commands.Bot):
     async def get_online(self):
         return self.online
 
-    # Get nano account associated with node
+    # Get banano account associated with node
     async def get_banano_account(self):
         return self.banano_account
 
