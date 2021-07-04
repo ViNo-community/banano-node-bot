@@ -8,17 +8,17 @@ class BlocksCog(commands.Cog, name="Blocks"):
     @commands.command(name='blocks', help="Displays summary of block information")
     async def block(self,ctx):
         try:
-            currentBlock = await self.bot.send_rpc({"action":"block_count"},"count")
-            current = int(currentBlock)
+            value = await self.bot.send_rpc({"action":"block_count"},"count")
+            blockCount = int(value)
             cementedBlocks = await self.bot.send_rpc({"action":"block_count"},"cemented")
             cemented = int(cementedBlocks)
             uncheckedBlocks = await self.bot.send_rpc({"action":"block_count"},"unchecked")
-            sync = float(current/cemented)
+            sync = float(cemented/blockCount)
             response = (
                 f"**Cemented Blocks:** {cementedBlocks}\n"
-                f"**Current Block:** {currentBlock}\n"
+                f"**Block Count:** {blockCount}\n"
                 f"**Unchecked Blocks:** {uncheckedBlocks}\n"
-                f"**Sync:**: {sync}%\n"
+                f"**Sync:**: {sync:.4f}%\n"
             )
             await ctx.send(response)
         except Exception as e:
@@ -57,8 +57,8 @@ class BlocksCog(commands.Cog, name="Blocks"):
             value = await self.bot.send_rpc({"action":"block_count"},"cemented")
             cemented = int(value)
             value = await self.bot.send_rpc({"action":"block_count"},"count")
-            current = int(value)
-            sync = float(current/cemented)
+            blockCount = int(value)
+            sync = float(cemented/blockCount)
             response = f"Block sync is {sync:.4f}%"
             await ctx.send(response)
         except Exception as e:
