@@ -14,8 +14,8 @@ class ServerCog(commands.Cog, name="Server"):
         try:
             node_name = ""
             server_load =  psutil.cpu_percent()
-            usedMem = psutil.virtual_memory().used
-            totalMem = psutil.virtual_memory().total
+            usedMem = psutil.virtual_memory().used / 1e6
+            totalMem = psutil.virtual_memory().total / 1e6
             percent = int(usedMem) / int(totalMem) * 100
            # seconds = time.time() - psutil.boot_time()
             seconds = 100
@@ -28,7 +28,7 @@ class ServerCog(commands.Cog, name="Server"):
                 f"**Server:** {server} [{ip_addr}]\n"
                 f"**Node Name:** {node_name}\n"
                 f"**Server Load:** {server_load}\n"
-                f"**Memory Usage:** {usedMem} MB / {totalMem} MB : {percent:.2f}%\n"
+                f"**Memory Usage:** {usedMem:.2f} MB / {totalMem:.2f} MB : {percent:.2f}%\n"
                 f"**Server Uptime:** {server_uptime}\n"
                 f"**Node Uptime:** {pretty_node_uptime}"
             )
