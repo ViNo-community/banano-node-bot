@@ -14,11 +14,13 @@ Install the discord.py and dotenv Python packages with:
 
 To get the bot to run, you need to edit some configuration values in the .env file. 
 
-Open the .env file in a text editor. The .env file holds your configuration data. The two variables that need to be set before the bot can be run are DISCORD_TOKEN and RPC_URL.
+Open the .env file in a text editor. The .env file holds your configuration data. The three variables that need to be set before the bot can be run are DISCORD_TOKEN, BANANO_ACCOUNT and RPC_URL.
 
 **IMPORTANT: The .env file should be private - it contains sensitive information that should not be visible to other people.**
 
 If anyone has access to your DISCORD_TOKEN they'll be able to control the bot. .env file should have read and wite permissions for the owner only. If on Linux you can set the appropriate permissions with $chmod 600 .env 
+
+The banano_account is the account you set up your wallet with when you started your node. It is in the format ban_XXXXXXX.
 
 Add your DISCORD_TOKEN to the placeholder. This is the special unique hexadecimal token that acts as a "key" to access your Discord bot. It is found on the [Discord Applications settings](https://discord.com/developers/applications) in the bot section. Select your bot and click where it says "Click to Reveal Token." Copy and paste this token to your .env file. Remember, do not tell anyone else your Discord token or else they'll be able to control your bot. 
 
