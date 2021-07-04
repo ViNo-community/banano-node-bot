@@ -13,7 +13,6 @@ class ServerCog(commands.Cog, name="Server"):
     @commands.command(name='server', help="Displays summary of server information")
     async def server(self,ctx):
         try:
-            node_name = ""
             server_load =  psutil.cpu_percent()
             usedMem = psutil.virtual_memory().used / 1e6
             totalMem = psutil.virtual_memory().total / 1e6
@@ -26,7 +25,6 @@ class ServerCog(commands.Cog, name="Server"):
             ip_addr = socket.gethostbyname(server)
             response = (
                 f"**Server:** {server} [{ip_addr}]\n"
-                f"**Node Name:** {node_name}\n"
                 f"**Server Load:** {server_load}\n"
                 f"**Memory Usage:** {usedMem:.2f} MB / {totalMem:.2f} MB : {percent:.2f}%\n"
                 f"**Server Uptime:** {server_uptime}\n"
@@ -36,11 +34,23 @@ class ServerCog(commands.Cog, name="Server"):
         except Exception as e:
             raise Exception("Exception displaying server summary", e)      
 
+    @commands.command(name='uptime', help="Displays node uptime")
+    async def server_uptime(self,ctx):
+        try:
+            value = await self.bot.send_rpc({"action": "uptime"},"seconds")
+            secs = int(value)
+            pretty_node_uptime = Common.get_days_from_secs(secs)
+            response =  f"**Node Uptime:** {pretty_node_uptime}"
+            await ctx.send(response)
+        except Exception as e:
+            raise Exception("Could not grab server_uptime", e)    
+
     @commands.command(name='server_uptime', aliases=['serveruptime','sup'], help="Displays server uptime")
     async def server_uptime(self,ctx):
         try:
-            value = await self.bot.get_value('systemUptime')
-            response = f"Server uptime is {value}"
+            seconds = time.time() - psutil.boot_time()
+            server_uptime = Common.get_days_from_secs(seconds)
+            response = f"Server uptime is {server_uptime}"
             await ctx.send(response)
         except Exception as e:
             raise Exception("Could not grab server_uptime", e)      
@@ -48,8 +58,8 @@ class ServerCog(commands.Cog, name="Server"):
     @commands.command(name='server_load', aliases=['serverload','systemload','load'], help="Displays server load")
     async def server_load(self,ctx):
         try:
-            value = await self.bot.get_value('systemLoad')
-            response = f"Server load is {value}"
+            server_load =  psutil.cpu_percent()
+            response = f"Server load is {server_load}"
             await ctx.send(response)
         except Exception as e:
             raise Exception("Could not grab server_load", e)           
@@ -57,8 +67,9 @@ class ServerCog(commands.Cog, name="Server"):
     @commands.command(name='mem_usage', aliases=['memory_usage','memusage','memory','mem'], help="Displays memory usage")
     async def mem_usage(self,ctx):
         try:
-            usedMem = await self.bot.get_value('usedMem')
-            totalMem = await self.bot.get_value('totalMem')
+
+            usedMem = psutil.virtual_memory().used / 1e6
+            totalMem = psutil.virtual_memory().total / 1e6
             percent = int(usedMem) / int(totalMem) * 100
             response = f"Memory usage is {usedMem} MB / {totalMem} MB : {percent:.2f}%"
             await ctx.send(response)
@@ -68,7 +79,7 @@ class ServerCog(commands.Cog, name="Server"):
     @commands.command(name='hostname', aliases=['host'], help="Displays host name")
     async def node_name(self,ctx):
         try:
-            value = await self.bot.get_value('nanoNodeName')
+            value = socket.gethostname()
             response = f"Node hostname is {value}"
             await ctx.send(response)
         except Exception as e:
