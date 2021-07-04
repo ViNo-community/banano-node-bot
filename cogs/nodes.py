@@ -42,14 +42,22 @@ class NodesCog(commands.Cog, name="Nodes"):
         except Exception as e:
             raise Exception("Could not show version", e)
 
-    @commands.command(name='num_peers', aliases=['numpeers','peers'], help="Displays number of peers")
-    async def num_peers(self,ctx):
+    @commands.command(name='peers', help="Displays peers")
+    async def peers(self,ctx):
         try:
             # Get number of network pairs
             peers = await self.bot.send_rpc({"action":"peers"},"peers")
             peerCount = len(peers)
-            response = f"{peerCount} peers"
-            await ctx.send(response)
+            msg = ""
+            CHUNK_SIZE = 1000
+            for peer in peers:
+                # Cut message into chunks
+                if(len(msg) > CHUNK_SIZE):
+                    await ctx.send(msg)
+                    msg = ""
+                msg += f"{peer}\n"
+            msg += f"{peerCount} peers"
+            await ctx.send(msg)
         except Exception as e:
             raise Exception("Could not grab num_peers", e)   
 
