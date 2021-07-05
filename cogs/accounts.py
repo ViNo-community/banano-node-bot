@@ -98,7 +98,6 @@ class AccountsCog(commands.Cog, name="Accounts"):
             # Parse delegators information - account number and balance
             delegators = content['delegators']
             msg = ""
-            CHUNK_SIZE = 1000
             if(content['delegators'] == ""):
                 msg = "No delegators"
             else:
@@ -107,7 +106,7 @@ class AccountsCog(commands.Cog, name="Accounts"):
                     # Convert from raw to banano
                     ban = Common.rawToBanano(int(delegators[item]))
                     # Cut message into chunks
-                    if(len(msg) > CHUNK_SIZE):
+                    if(len(msg) > self.bot.DISCORD_MAX_MSG_LEN):
                         await ctx.send(msg)
                         msg = ""
                     # Hide zero balances

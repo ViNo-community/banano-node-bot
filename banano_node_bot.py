@@ -28,7 +28,9 @@ class BananoNodeBot(commands.Bot):
     permission = 0
     timeout = 5.0
     # Check heartbeat every HEARTBEAT_INTERVAL seconds
-    heartbeat_interval = 0
+    HEARTBEAT_INTERVAL = 0
+    # How big Discord messages can be (Must be < 2000 chars)
+    DISCORD_MAX_MSG_LEN = 1000
 
     def __init__(self):
         # Load discord token from .env file
@@ -51,16 +53,16 @@ class BananoNodeBot(commands.Bot):
         self.banano_account = os.getenv('banano_account')
         self.cmd_prefix = os.getenv('command_prefix', "!")
         self.permission = int(os.getenv('permission', 247872))
-        self.heartbeat_interval = int(os.getenv('heartbeat_interval', 180))
-        self.timeout = float(os.getenv('timeout', 5.0))
+        self.HEARTBEAT_INTERVAL = int(os.getenv('heartbeat_interval', 180))
+        self.timeout = float(os.getenv('timeout', 30.0))
         self.client_id = os.getenv('client_id')
         if os.getenv('command_prefix') is not None:
             self.cmd_prefix = os.getenv('command_prefix')
         if os.getenv('timeout') is not None:
             try:
-                self.timeout = float(os.getenv('timeout') or 5.0)
+                self.timeout = float(os.getenv('timeout') or 30.0)
             except ValueError:
-                self.timeout = 5.0
+                self.timeout = 30.0
         # Init set command prefix and description
         commands.Bot.__init__(self, command_prefix=self.cmd_prefix,description="Banano Node Bot")
         # Register heartbeat checker
@@ -79,7 +81,7 @@ class BananoNodeBot(commands.Bot):
                 if(self.initialized):
                     await self.set_online(online)
                 # Sleep HEARTBEAT_INTERVAL seconds
-                time.sleep(self.heartbeat_interval)
+                time.sleep(self.HEARTBEAT_INTERVAL)
         # Start the heartbeat
         heartbeat = Thread(target=asyncio.run, args=(_heartbeat_loop(),))
         heartbeat.daemon = True

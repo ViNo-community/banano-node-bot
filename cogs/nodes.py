@@ -27,8 +27,8 @@ class NodesCog(commands.Cog, name="Nodes"):
     @commands.command(name='address', aliases=['addr','node_address','nodeaddress'], help="Displays node address")
     async def address(self,ctx):
         try:
-            value = await self.bot.get_banano_address()
-            response = f"Node address is {value}"
+            account = await self.bot.get_banano_account()
+            response = f"Banano node address is {value}"
             await ctx.send(response)
         except Exception as e:
             raise Exception("Could not grab address", e)  
@@ -49,13 +49,15 @@ class NodesCog(commands.Cog, name="Nodes"):
             peers = await self.bot.send_rpc({"action":"peers"},"peers")
             peerCount = len(peers)
             msg = ""
+            i = 0
             CHUNK_SIZE = 1000
             for peer in peers:
+                i = i + 1
                 # Cut message into chunks
-                if(len(msg) > CHUNK_SIZE):
+                if(len(msg) > self.bot.DISCORD_MAX_MSG_LEN):
                     await ctx.send(msg)
                     msg = ""
-                msg += f"{peer}\n"
+                msg += f"**Peer #{i}:** {peer}\n"
             msg += f"{peerCount} peers"
             await ctx.send(msg)
         except Exception as e:
