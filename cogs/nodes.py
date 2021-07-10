@@ -27,8 +27,8 @@ class NodesCog(commands.Cog, name="Nodes"):
     @commands.command(name='address', aliases=['addr','node_address','nodeaddress'], help="Displays node address")
     async def address(self,ctx):
         try:
-            account = await self.bot.get_banano_account()
-            response = f"Banano node address is {value}"
+            address = await self.bot.get_banano_account()
+            response = f"Banano node address is {address}"
             await ctx.send(response)
         except Exception as e:
             raise Exception("Could not grab address", e)  
