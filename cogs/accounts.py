@@ -1,5 +1,7 @@
 from discord.ext import commands
-import json 
+import json
+
+from common import Common 
 
 class AccountsCog(commands.Cog, name="Accounts"):
 
@@ -12,11 +14,11 @@ class AccountsCog(commands.Cog, name="Accounts"):
             account = await self.bot.get_banano_account()
             representative = await self.bot.send_rpc({"action":"account_representative","account":account},"representative")
             value = await self.bot.send_rpc({"action":"account_balance","account":account},"balance")
-            balance = float(value)
+            balance = float(Common.rawToBanano(int(value)))
             value = await self.bot.send_rpc({"action":"account_balance","account":account},"pending")
-            pending = float(value)
+            pending = float(Common.rawToBanano(int(value)))
             value = await self.bot.send_rpc({"action":"account_weight","account":account},"weight")
-            voting_weight = float(value)
+            voting_weight = float(Common.rawToBanano(int(value)))
             response = (
                 f"**Account:** {account}\n"
                 f"**Representative:** {representative}\n"
@@ -33,7 +35,7 @@ class AccountsCog(commands.Cog, name="Accounts"):
         try:
             account = await self.bot.get_banano_account()
             value = await self.bot.send_rpc({"action":"account_balance","account":account},"balance")
-            balance = float(value)
+            balance = float(Common.rawToBanano(int(value)))
             response = f"Account balance is {balance:.2f} ban"
             await ctx.send(response)
         except Exception as e:
